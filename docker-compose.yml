@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: bookstore
+
+  app:
+    image: bookstore-restful
+    depends_on:
+      - postgres
+    command: java -jar /app.jar
+    ports:
+      - "8080:8080"
+
+volumes:
+  postgres-data:
